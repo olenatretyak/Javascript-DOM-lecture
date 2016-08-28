@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Javascript DOM lecture</title>
+</head>
+
+<body>
+
+  <h2>List of employees</h2>
+
+  <label for="limit">Limit number of employees</label>
+  <input class="limit-number" type="number" name="limit-number">
+
+  <ul id="employeeList">
+    <li>
+      <span class="employeeFirstName">John</span>
+      <span class="employeeLastName">Doe</span>
+      <span class="employeeSalary">1000</span>
+      <span class="employeePosition">Manager</span>
+    </li>
+  </ul>
+
+  <div>
+    <p>Number of employees <span class="numbEmpl">1</span></p>
+  </div>
+  <div>
+    <p>Average salary<span class="avg-salary"> $1000</span></p>
+  </div>
+
+
+  <form action="localhost:8080/do" method="post">
+  <fieldset class="login-form">
+    <legend>New Employee</legend>
+      <div class="form-row">
+        <label for="first name">First Name</label><br/>
+        <input type="text" id="first-name" name="first-name" placeholder="Enter first name...">
+      </div>
+
+      <div class="form-row">
+        <label for="last name">Last Name</label><br/>
+        <input type="text" id="last-name" name="last-name" placeholder="Enter last name...">
+      </div>
+
+      <div class="form-row">
+        <label for="salary">Salary</label><br/>
+        <input type="number" id="salary" name="name" placeholder="Enter salary...">
+      </div>
+     
+     <div class="form-row">
+        <label for="position">Position</label><br/>
+        <input type="text" id="position" name="name" placeholder="Enter position...">
+      </div>
+
+    <button class="addEmployee">Add New emplyee</button>
+  </fieldset>
+</form>
+  
+
+  <script type="text/javascript">
+
+  
+    document.getElementsByClassName("addEmployee")[0].onclick = function() {
+
+      var numberEmployees = document.querySelectorAll("li").length;
+
+      var limitOfEmployees = document.getElementsByClassName("limit-number")[0].value;
+      var limitNumber = parseInt(limitOfEmployees);
+
+      if(numberEmployees < limitNumber) {
+        var firstName = document.getElementById("first-name").value;
+        var lastName = document.getElementById("last-name").value;
+        var salary = document.getElementById("salary").value;
+        var position = document.getElementById("position").value;
+      
+        var newLi = document.createElement('li');
+
+        newLi.innerHTML = "<span>" + firstName + "</span>" + " " + "<span>" + lastName + "</span>" + " $ " + "<span class='employeeSalary'>" + salary + 
+        "</span>" + " " + "<span>" + position + "</span>";
+        employeeList.appendChild(newLi);
+
+        document.getElementsByClassName("numbEmpl")[0].innerHTML = numberEmployees;
+
+        var spanSalary = document.querySelectorAll("span.employeeSalary");
+        var salary_array = Array.prototype.slice.call(spanSalary)
+          .map(function(salary) {
+            return parseInt(salary.innerHTML);
+          });
+
+        var averageNumber = salary_array.reduce(function(sum, current) {
+          return sum + current;
+        }, 0);
+
+        var averageSalary = averageNumber/numberEmployees;
+        document.getElementsByClassName("avg-salary")[0].innerHTML = " $" + averageSalary;
+
+      } else {
+        alert("Limit number of employees is " + limitNumber);
+      }
+      
+    };
+
+
+
+   
+
+  </script>
+
+</body>
+</html>
