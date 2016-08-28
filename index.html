@@ -9,12 +9,12 @@
   <h2>List of employees</h2>
 
   <label for="limit">Limit number of employees</label>
-  <input class="limit-number" type="number" name="limit-number">
+  <input class="limit-number" type="number" name="limit-number" value="10">
 
   <ul id="employeeList">
     <li>
       <span class="employeeFirstName">John</span>
-      <span class="employeeLastName">Doe</span>
+      <span class="employeeLastName">Doe</span> $
       <span class="employeeSalary">1000</span>
       <span class="employeePosition">Manager</span>
     </li>
@@ -24,7 +24,7 @@
     <p>Number of employees <span class="numbEmpl">1</span></p>
   </div>
   <div>
-    <p>Average salary<span class="avg-salary"> $1000</span></p>
+    <p>Average salary $ <span class="avg-salary">1000</span></p>
   </div>
 
 
@@ -43,7 +43,7 @@
 
       <div class="form-row">
         <label for="salary">Salary</label><br/>
-        <input type="number" id="salary" name="name" placeholder="Enter salary...">
+        <input type="number" id="salary" name="name" placeholder="Enter salary..." value="0">
       </div>
      
      <div class="form-row">
@@ -66,35 +66,63 @@
       var limitOfEmployees = document.getElementsByClassName("limit-number")[0].value;
       var limitNumber = parseInt(limitOfEmployees);
 
-      if(numberEmployees < limitNumber) {
+      var initialAverageNumber = document.querySelectorAll("span.avg-salary")[0];
+      var initialAverageSalary = parseInt(initialAverageNumber.innerHTML);
+
+    
+      if(numberEmployees < limitNumber && initialAverageSalary < 2000) {
         var firstName = document.getElementById("first-name").value;
         var lastName = document.getElementById("last-name").value;
         var salary = document.getElementById("salary").value;
         var position = document.getElementById("position").value;
-      
-        var newLi = document.createElement('li');
 
-        newLi.innerHTML = "<span>" + firstName + "</span>" + " " + "<span>" + lastName + "</span>" + " $ " + "<span class='employeeSalary'>" + salary + 
-        "</span>" + " " + "<span>" + position + "</span>";
-        employeeList.appendChild(newLi);
+        var liList = document.getElementsByTagName("li");
+        var liArray = Array.prototype.slice.call(liList)
+          .filter(function(li){
+            var firstNameSpan = li.getElementsByClassName('employeeFirstName')[0];
+            var fistNameValue = firstNameSpan.innerHTML;
+            var lastNameSpan = li.getElementsByClassName('employeeLastName')[0];
+            var lastNameValue = lastNameSpan.innerHTML;
 
-        document.getElementsByClassName("numbEmpl")[0].innerHTML = numberEmployees;
-
-        var spanSalary = document.querySelectorAll("span.employeeSalary");
-        var salary_array = Array.prototype.slice.call(spanSalary)
-          .map(function(salary) {
-            return parseInt(salary.innerHTML);
+            return (firstName == fistNameValue && lastName == lastNameValue);
           });
 
-        var averageNumber = salary_array.reduce(function(sum, current) {
-          return sum + current;
-        }, 0);
 
-        var averageSalary = averageNumber/numberEmployees;
-        document.getElementsByClassName("avg-salary")[0].innerHTML = " $" + averageSalary;
+        if  (firstName == "" && lastName == "")  {
+          alert("Add first name or last name!");
+        } else if (liArray.length !== 0) {
+          alert("This name is already in the list!");
+        } else {
+          var newLi = document.createElement('li');
 
+          newLi.innerHTML = "<span class='employeeFirstName'>" + firstName + "</span>" + " " + "<span class='employeeLastName'>" + lastName + "</span>" + " $ " + "<span class='employeeSalary'>" + salary + 
+          "</span>" + " " + "<span>" + position + "</span>";
+          employeeList.appendChild(newLi);
+
+          document.getElementById("first-name").value = "";
+          document.getElementById("last-name").value = "";
+          document.getElementById("salary").value = 0;
+          document.getElementById("position").value = "";
+
+
+          document.getElementsByClassName("numbEmpl")[0].innerHTML = numberEmployees;
+
+          var spanSalary = document.querySelectorAll("span.employeeSalary");
+          var salaryArray = Array.prototype.slice.call(spanSalary)
+            .map(function(salary) {
+              return parseInt(salary.innerHTML);
+            });
+
+          var averageNumber = salaryArray.reduce(function(sum, current) {
+            return sum + current;
+          }, 0);
+
+          var averageSalary = averageNumber/numberEmployees;
+          document.getElementsByClassName("avg-salary")[0].innerHTML = averageSalary;
+        };
+        
       } else {
-        alert("Limit number of employees is " + limitNumber);
+        alert("Limit number of employees is " + limitNumber + " and limit of average salary is $2000");
       }
       
     };
